@@ -4,6 +4,7 @@ from flask.ext.pymongo import PyMongo
 
 
 app = Flask(__name__)
+app.config['SERVER_NAME'] = 'app:5001'
 mongo = PyMongo(app)
 
 
