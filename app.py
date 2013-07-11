@@ -2,6 +2,8 @@ from flask import Flask, jsonify, request
 from functools import wraps
 from flask.ext.pymongo import PyMongo
 from flask.ext.restful import Resource, Api, reqparse
+import json
+from bson import json_util
 
 # app configuration
 app = Flask(__name__)
@@ -9,6 +11,14 @@ app = Flask(__name__)
 api = Api(app=app, prefix='/api/v1')
 
 mongo = PyMongo(app)
+
+
+def json_fmt(cursor):
+    json_docs = []
+    for doc in cursor:
+        json_doc = json.dumps(doc, default=json_util.default)
+        json_docs.append(json_doc)
+    return json_docs
 
 # TODO build auth
 def basic_authetication():
@@ -37,10 +47,10 @@ class Merchant(Resource):
         merchant = { 'merchant' : args['merchant'] }
         mongo.db.merchants.save( merchant )
 
-class Merchants(Resource):
+class MerchantList(Resource):
     def get(self):
-        return mongo.db.merchants.find()
-
+        cursor = mongo.db.merchants.find()
+        return json_fmt(cursor)
 
 class HelloWorld(Resource):
     method_decorators = [authenticate]
