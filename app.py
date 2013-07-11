@@ -1,4 +1,3 @@
-#!../env/flask/bin/python
 from flask import Flask, jsonify
 from flask.ext.pymongo import PyMongo
 
