@@ -20,7 +20,7 @@ def json_fmt(cursor):
         json_docs.append(json_doc)
     return json_docs
 
-# TODO build auth
+# build auth
 def basic_authetication():
     return True
 
@@ -37,7 +37,7 @@ def authenticate(func):
 
 class Merchant(Resource):
     def get(self, merchant_id):
-        return mongo.db.merchants.find( { 'merchant_id' : merchant_id } )
+        return mongo.db.merchants.find_one( { 'merchant_id' : merchant_id } )
 
     def delete(self, merchant_id):
         mongo.db.merchants.remove( { 'merchant_id' : merchant_id } )
@@ -52,32 +52,34 @@ class MerchantList(Resource):
         cursor = mongo.db.merchants.find()
         return json_fmt(cursor)
 
-class HelloWorld(Resource):
+# test code
+class APIRunning(Resource):
     method_decorators = [authenticate]
     def get(self):
         # for reference
         app.logger.info('informing')
         app.logger.warning('warning')
-        app.logger.error('screaming bloody murder!')
-        return { 'hello' : 'world' }
+        app.logger.error('error')
+        return { 'running' : 'yes' }
 
 
 
-api.add_resource( HelloWorld, '/' )
+api.add_resource( APIRunning, '/' )
 api.add_resource( Merchant, '/merchant/<string:merchant_id>' )
 api.add_resource( MerchantList, '/merchants' )
 
 
 
-
+# raw flask (test code)
 @app.route('/')
 def index():
-    return "Hello, World!"
+    return "Flask Running..."
 
-@app.route('/test')
+@app.route('/db-test')
 def test():
     test = { 'first' : 'uno', 'second' : 'dos', 'third' : 'tres' }
     mongo.db.tests.save(test)
+    return "Success!"
 
 
 if __name__ == '__main__':
