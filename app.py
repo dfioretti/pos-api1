@@ -68,7 +68,7 @@ api.add_resource( APIRunning, '/' )
 api.add_resource( Merchant, '/merchant/<string:merchant_id>' )
 api.add_resource( MerchantList, '/merchants' )
 
-
+# pats comment
 
 # raw flask (test code)
 @app.route('/')
