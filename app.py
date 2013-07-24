@@ -1,9 +1,10 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 from functools import wraps
 from flask.ext.pymongo import PyMongo
 from flask.ext.restful import Resource, Api, reqparse
 import json
 from bson import json_util
+from bson.objectid import ObjectId
 
 # app configuration
 app = Flask(__name__)
@@ -21,7 +22,7 @@ def json_fmt(cursor):
     return json_docs
 
 # build auth
-def basic_authetication():
+def basic_authentication():
     return True
 
 def authenticate(func):
@@ -29,7 +30,7 @@ def authenticate(func):
     def wrapper(*args, **kwargs):
         if not getattr(func, 'authenticated', True):
             return func(*args, **kwargs)
-        acct = basic_authetication()
+        acct = basic_authentication()
         if acct:
             return func(*args, **kwargs)
         abort(401)
@@ -52,6 +53,11 @@ class MerchantList(Resource):
         cursor = mongo.db.merchants.find()
         return json_fmt(cursor)
 
+class Catalog(Resource):
+    def get(self, catalog_id):
+        return mongo.db.catalogs.find_one( { 'catalog_id' : catalog_id } )
+
+
 # test code
 class APIRunning(Resource):
     method_decorators = [authenticate]
@@ -60,13 +66,12 @@ class APIRunning(Resource):
         app.logger.info('informing')
         app.logger.warning('warning')
         app.logger.error('error')
-        return { 'running' : 'yes' }
+        return {'running': 'yes'}
 
-
-
-api.add_resource( APIRunning, '/' )
-api.add_resource( Merchant, '/merchant/<string:merchant_id>' )
-api.add_resource( MerchantList, '/merchants' )
+api.add_resource(APIRunning, '/' )
+api.add_resource(Merchant, '/merchants/<string:merchant_id>')
+api.add_resource(MerchantList, '/merchants')
+api.add_resource(Catalog, '/catalogs/<string:catalog_id>')
 
 # pats comment
 
