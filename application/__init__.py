@@ -21,3 +21,5 @@ api = restful.Api(app, prefix='/api/v1')
 
 # load routes
 import routes
+
+#import controllers

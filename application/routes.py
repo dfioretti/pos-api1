@@ -3,4 +3,3 @@ from application.controllers.site import SiteResource
 from application.controllers.merchant import Merchant
 
 api.add_resource(SiteResource, '/')
-api.add_resource(Merchant, '/merchant')
