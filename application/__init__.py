@@ -17,7 +17,7 @@ else:
 db = PyMongo(app)
 
 # setup restful support
-api = restful.Api(app)
+api = restful.Api(app, prefix='/api/v1')
 
 # load routes
 import routes
