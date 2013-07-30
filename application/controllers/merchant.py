@@ -34,6 +34,9 @@ class Merchant(restful.Resource):
         mongo.db.merchants.update( { '_id' : ObjectId(merchant_id) } , { '$set' : args } )
         return to_json(mongo.db.merchants.find_one( { '_id' : ObjectId(merchant_id) } ))
 
+    def delete(self, merchant_id):
+        mongo.db.merchants.remove( { '_id' : ObjectId(merchant_id) } )
+        return { 'success' : True }
 
 
 class MerchantList(restful.Resource):
