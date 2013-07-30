@@ -14,7 +14,7 @@ else:
 
 # connect to the database
 #db = MongoEngine(app)
-db = PyMongo(app)
+mongo = PyMongo(app)
 
 # setup restful support
 api = restful.Api(app, prefix='/api/v1')
