@@ -1,6 +1,8 @@
 from application import app
 from application import api
 from application import mongo
+from application.db_utils import to_json
+
 # request parser
 from flask.ext.restful import reqparse
 
@@ -20,11 +22,6 @@ parser.add_argument('city', type=str)
 parser.add_argument('state', type=str)
 parser.add_argument('zip', type=str)
 parser.add_argument('phone', type=str)
-
-
-def to_json(data):
-    return json.dumps(data, default=json_util.default)
-
 
 class Merchant(restful.Resource):
     def get(self, merchant_id):
