@@ -27,9 +27,13 @@ def to_json(data):
 class Merchant(restful.Resource):
     def get(self, merchant_id):
         app.logger.info(merchant_id)
-        oid = ObjectId(merchant_id)
-        return to_json(mongo.db.merchants.find_one( { '_id' : oid } ))
-        #return mongo.db.merchants.find_one( { '_id' : ObjectId(merchant_id) } )
+        return to_json(mongo.db.merchants.find_one( { '_id' : ObjectId(merchant_id) } ))
+
+    def put(self, merchant_id):
+        args = parser.parse_args()
+        mongo.db.merchants.update( { '_id' : ObjectId(merchant_id) } , { '$set' : args } )
+        return to_json(mongo.db.merchants.find_one( { '_id' : ObjectId(merchant_id) } ))
+
 
 
 class MerchantList(restful.Resource):
@@ -48,8 +52,9 @@ class MerchantList(restful.Resource):
 #
 # name, street, city, state, zip, phone
 
-api.add_resource(Merchant, '/merchant/<string:merchant_id>')
+api.add_resource(Merchant, '/merchants/<string:merchant_id>')
 api.add_resource(MerchantList, '/merchants')
 
 
+#https://ep2013.europython.eu/conference/talks/developing-restful-web-apis-with-python-flask-and-mongodb
 
