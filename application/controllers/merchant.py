@@ -1,11 +1,14 @@
 from application import app
 from application import api
 from application import mongo
+# request parser
 from flask.ext.restful import reqparse
 
+# framework imports
 from flask.ext import restful
 from flask.ext.restful import abort
 
+# db utils
 import json
 from bson import json_util
 from bson.objectid import ObjectId
@@ -17,7 +20,6 @@ parser.add_argument('city', type=str)
 parser.add_argument('state', type=str)
 parser.add_argument('zip', type=str)
 parser.add_argument('phone', type=str)
-
 
 
 def to_json(data):
@@ -51,9 +53,6 @@ class MerchantList(restful.Resource):
         args = parser.parse_args()
         oid = mongo.db.merchants.insert(args)
         return to_json(mongo.db.merchants.find_one( { '_id' : oid } ))
-
-#
-# name, street, city, state, zip, phone
 
 api.add_resource(Merchant, '/merchants/<string:merchant_id>')
 api.add_resource(MerchantList, '/merchants')
